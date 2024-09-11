@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Teams.Persistence.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,13 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });//Adding and using Corse is needed becaue, otherwise it will cause CORS(Cross-Origin Resource Sharing) error. This occures because the Angular frontend is running
 //on http://localhost:4200, while your backend API is running on https://localhost:7155, and the browser is blocking the request due to the same-origin policy.
+
+
+//Register DbContext
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<TeamsDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllers();
