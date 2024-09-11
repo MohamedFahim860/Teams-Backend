@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Teams.Domain.Models
 {
-    internal class User
+    public class User
     {
         public int UserId { get; set; }//Primary Key
         public string UserName { get; set; }

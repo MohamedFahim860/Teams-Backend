@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Teams.Domain.Models
 {
-    internal class Message
+    public class Message
     {
         public int MessageId { get; set; }
         public string MessageText { get; set; }

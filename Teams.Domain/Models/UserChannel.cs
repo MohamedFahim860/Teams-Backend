@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Teams.Domain.Models
 {
-    internal class UserChannel
+    public class UserChannel
     {
         public int Id { get; set; }
 
