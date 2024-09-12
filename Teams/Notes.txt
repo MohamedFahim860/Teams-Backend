@@ -1,0 +1,4 @@
+1. For migrations
+	: Keep the default project selected as Teams( the main web api project)
+	: Add-Migration InitialCreate -p Teams.Persistence -o Migrations
+	: Update-database

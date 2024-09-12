@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Teams.Domain.Models;
+using Teams.Persistence.EntityConfiguration;
 
 namespace Teams.Persistence.Context
 {
@@ -17,7 +18,7 @@ namespace Teams.Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new EmployeeProjectEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserChannelEntityTypeConfiguration());
 
             //modelBuilder.ApplyConfiguration(new EmployeeDetailsEntityTypeConfiguration());
         }
