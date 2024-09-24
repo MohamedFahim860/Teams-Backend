@@ -11,10 +11,10 @@ namespace Teams.Domain.Models
         public int Id { get; set; }
 
         public int UserId { get; set; }//Foreign key
-        public User? User { get; set; }//Reference Navigation Property
+        public User User { get; set; }//Reference Navigation Property
 
         public int ChannelId { get; set; }//Foreign key
-        public Channel? Channel { get; set; }//Reference Navigation property
+        public Channel Channel { get; set; }//Reference Navigation property
  
     }
 }

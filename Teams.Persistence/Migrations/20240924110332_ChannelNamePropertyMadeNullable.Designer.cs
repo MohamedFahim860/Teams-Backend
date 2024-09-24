@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Teams.Persistence.Context;
 
@@ -11,9 +12,11 @@ using Teams.Persistence.Context;
 namespace Teams.Persistence.Migrations
 {
     [DbContext(typeof(TeamsDbContext))]
-    partial class TeamsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240924110332_ChannelNamePropertyMadeNullable")]
+    partial class ChannelNamePropertyMadeNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
