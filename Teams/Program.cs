@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 using Teams.Domain.Interfaces.Repositories;
 using Teams.Domain.Interfaces.Services;
 using Teams.Persistence.Context;
@@ -54,18 +55,54 @@ builder.Services.AddDbContext<TeamsDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers();//below additional configuration in AddController is used to prevent circular reference problem in the objects.
+//builder.Services.AddControllers().AddJsonOptions(options =>
+//{
+//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+//});
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 
 
 //Registering Swagger Service
 builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project Management API", Version = "v1" });
+//});
+
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project Management API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+
+    // Adding JWT Authentication
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+              new OpenApiSecurityScheme
+              {
+                Reference = new OpenApiReference
+                {
+                  Type = ReferenceType.SecurityScheme,
+                  Id = "Bearer"
+                }
+              },
+              new string[] {}
+            }
+        });
 });
 
 
