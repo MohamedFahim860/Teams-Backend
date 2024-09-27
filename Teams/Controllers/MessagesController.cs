@@ -33,10 +33,16 @@ namespace Teams.Controllers
 
         // Add User Message
         [HttpPost("send")]
-        public async Task<IActionResult> AddMessage(Message message, int ReceiverId)
+        public async Task<IActionResult> AddMessage(AddMessageDto text)
         {
             try
             {
+                var ReceiverId = text.ReceiverId;
+                var message = new Message
+                {
+                    MessageText = text.MessageText
+                };
+
                 Console.WriteLine(message.MessageText);
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;//Getting the userId from the authentication token
                 message.UserId = int.Parse(userId);
