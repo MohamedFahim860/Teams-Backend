@@ -133,5 +133,10 @@ namespace Teams.Services.Services
             return await _messageRepository.DeleteMessage(messageId); 
         }
 
+        public async Task<Message> UpdateMessage(int messageId, UpdateMessageDto updateMessage)
+        {
+            return await _messageRepository.UpdateMessage(messageId, updateMessage);
+        }
+
     }
 }

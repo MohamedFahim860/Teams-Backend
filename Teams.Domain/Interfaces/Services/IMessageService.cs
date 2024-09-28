@@ -13,5 +13,6 @@ namespace Teams.Domain.Interfaces.Services
         Task<int> AddMessage(SendMessageDto message);
         Task<List<Message>> GetMessagesBetweenUsers(int user1Id, int user2Id);
         Task<bool> DeleteMessage(int messageId);
+        Task<Message> UpdateMessage(int messageId, UpdateMessageDto updateMessage);
     }
 }

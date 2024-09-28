@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Teams.Domain.DTOs;
 using Teams.Domain.Interfaces.Repositories;
 using Teams.Domain.Models;
 using Teams.Persistence.Context;
@@ -38,6 +39,22 @@ namespace Teams.Persistence.Repositories
             var result = await _context.SaveChangesAsync();
 
             return result > 0;
+        }
+
+        public async Task<Message> UpdateMessage(int messageId, UpdateMessageDto updateMessage)
+        {
+            var message = await _context.Message.FindAsync(messageId);
+            message.MessageText = updateMessage.MessageText;
+
+            if (message == null)
+            {
+                return null;
+            }
+
+            _context.Message.Update(message);
+            var result = await _context.SaveChangesAsync();
+
+            return message;
         }
     }
 }

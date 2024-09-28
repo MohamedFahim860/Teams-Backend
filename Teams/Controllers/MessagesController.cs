@@ -112,5 +112,30 @@ namespace Teams.Controllers
             }
         }
 
+        [HttpPut("update/{messageId}")]
+        public async Task<IActionResult> UpdateMessage(int messageId, [FromBody] UpdateMessageDto updateMessage)
+        {
+            try
+            {
+                var result = await _messageService.UpdateMessage(messageId, updateMessage);
+
+                if (result != null)
+                {
+                    _logger.LogInformation($"Message with ID {messageId} updated successfully.");
+                    return Ok($"Message with ID {messageId} updated successfully.");
+                }
+                else
+                {
+                    _logger.LogWarning($"Message with ID {messageId} not found.");
+                    return NotFound($"Message with ID {messageId} not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while trying to update message with ID {messageId}: {ex.Message}");
+                return StatusCode(500, "Internal server error while trying to update the message.");
+            }
+        }
+
     }
 }
