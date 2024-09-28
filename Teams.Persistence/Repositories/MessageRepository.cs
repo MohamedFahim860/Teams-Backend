@@ -24,5 +24,20 @@ namespace Teams.Persistence.Repositories
             _context.Message.Add(message);
             return await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> DeleteMessage(int messageId)
+        {
+            var message = await _context.Message.FindAsync(messageId);
+
+            if (message == null)
+            {
+                return false;
+            }
+
+            _context.Message.Remove(message);
+            var result = await _context.SaveChangesAsync();
+
+            return result > 0;
+        }
     }
 }

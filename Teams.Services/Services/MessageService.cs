@@ -9,6 +9,7 @@ using Teams.Domain.Interfaces.Repositories;
 using Teams.Domain.Interfaces.Services;
 using Teams.Domain.Models;
 using Teams.Persistence.Context;
+using Teams.Persistence.Repositories;
 
 namespace Teams.Services.Services
 {
@@ -125,6 +126,11 @@ namespace Teams.Services.Services
                 .ToListAsync();
 
             return messages;
+        }
+
+        public async Task<bool> DeleteMessage(int messageId)
+        {
+            return await _messageRepository.DeleteMessage(messageId); 
         }
 
     }

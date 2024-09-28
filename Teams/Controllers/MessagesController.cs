@@ -87,5 +87,30 @@ namespace Teams.Controllers
             }
         }
 
+        [HttpDelete("delete/{messageId}")]
+        public async Task<IActionResult> DeleteMessage(int messageId)
+        {
+            try
+            {
+                var result = await _messageService.DeleteMessage(messageId);
+
+                if (result)
+                {
+                    _logger.LogInformation($"Message with ID {messageId} deleted successfully.");
+                    return Ok($"Message with ID {messageId} deleted successfully.");
+                }
+                else
+                {
+                    _logger.LogWarning($"Message with ID {messageId} not found.");
+                    return NotFound($"Message with ID {messageId} not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while trying to delete message with ID {messageId}: {ex.Message}");
+                return StatusCode(500, "Internal server error while trying to delete the message.");
+            }
+        }
+
     }
 }

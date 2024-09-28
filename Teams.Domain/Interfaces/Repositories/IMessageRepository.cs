@@ -10,5 +10,6 @@ namespace Teams.Domain.Interfaces.Repositories
     public interface IMessageRepository
     {
         Task<int> AddMessage(Message message);
+        Task<bool> DeleteMessage(int messageId);
     }
 }
