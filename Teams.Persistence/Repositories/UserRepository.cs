@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,9 +24,9 @@ namespace Teams.Persistence.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> GetUserById(int id)
+        public async Task<User> GetUserById(int id)
         {
-            return await _context.SaveChangesAsync();
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
         }
 
         public async Task<int> AddUser(User user)
@@ -39,7 +40,19 @@ namespace Teams.Persistence.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        
+        public async Task<bool> CheckEmailExists(string email)
+        {
+            var isTaken =await _context.Users.AnyAsync(u => u.Email == email);
+            return isTaken;
+        }
+
+        public async Task<bool> CheckUsernameExists(string username)
+        {
+            var isTaken = await _context.Users.AnyAsync(u => u.UserName == username);
+            return isTaken;
+        }
+
+
 
     }
 }

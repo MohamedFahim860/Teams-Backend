@@ -57,8 +57,8 @@ namespace Teams.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new Claim(ClaimTypes.Name, user.UserName)
+                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName)
                     // Add roles or other claims if needed
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),  // Set expiration

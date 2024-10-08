@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using Teams.Domain.DTOs;
 using Teams.Domain.Interfaces.Services;
 using Teams.Domain.Models;
 using Teams.Persistence.Context;
@@ -81,7 +83,7 @@ namespace Teams.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("add")]
         public async Task<IActionResult> AddUser(User user)
         {
             try
@@ -132,7 +134,7 @@ namespace Teams.Controllers
         //}
 
         [HttpGet("current")]
-        public IActionResult GetCurrentUser()
+        public async Task<IActionResult> GetCurrentUser()
         {
             // Get the current user's ID from claims
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;//Populating the User Object: When a request is made with an authentication token (e.g., a JWT token in the Authorization header or a cookie), the authentication middleware verifies the token. If valid, it creates a ClaimsPrincipal object from the token’s claims and attaches it to HttpContext.User. The User object is now available during the lifetime of that request, and can be accessed in any controller or service as HttpContext.User.
@@ -142,7 +144,7 @@ namespace Teams.Controllers
             if (userId != null)
             {
                 // Call the service method to fetch the user
-                var user = _userService.GetUserById(int.Parse(userId));
+                var user = await _userService.GetUserById(int.Parse(userId));
 
                 if (user != null)
                 {
@@ -151,8 +153,21 @@ namespace Teams.Controllers
 
                 return NotFound("User not found");
             }
+            return NotFound("User not found");
+        }
 
-            return Unauthorized();
+        [HttpPost("check-email")]
+        public async Task<IActionResult> CheckEmailExists(CheckEmailRequestDto email)
+        {
+            var isTaken = await _userService.CheckEmailExists(email);
+            return Ok(isTaken);
+        }
+
+        [HttpPost("check-username")]
+        public async Task<IActionResult> CheckUsernameExists(CheckUsernameRequestDto username)
+        {
+            var isTaken = await _userService.CheckUsernameExists(username);
+            return Ok(isTaken);
         }
 
         private bool UserExists(int id)
@@ -161,3 +176,10 @@ namespace Teams.Controllers
         }
     }
 }
+
+//A Task in C# represents an operation that may run asynchronously and complete at some point in the future. When you execute an asynchronous method, it returns a Task object,
+//which serves as a placeholder for the future result.
+
+//It's also important,if we create control functions as synchronous(without using async, task, await and all), the rest of the service and the repository functions also should be 
+//synchronous, otherwise it would give serialization error which would be a 500 error, and also if we create the controller functions as asynchronous, all the other functions which it calls,
+//in the service and the repository files are also should be asynchronous.

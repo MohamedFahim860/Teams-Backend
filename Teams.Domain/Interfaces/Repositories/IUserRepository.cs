@@ -10,9 +10,11 @@ namespace Teams.Domain.Interfaces.Repositories
     public interface IUserRepository
     {
         Task<int> GetUsers();
-        Task<int> GetUserById(int id);
+        Task<User> GetUserById(int id);
         Task<int> AddUser(User user);
         Task<int> DeleteUser(int id);
+        Task<bool> CheckEmailExists(string email);
+        Task<bool> CheckUsernameExists(string username);
 
     }
 }
