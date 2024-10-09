@@ -58,9 +58,9 @@ namespace Teams.Services.Services
         {
             // Search for a common channel in the UserChannel table
             var channelUserEntries = await _context.UserChannels
-                .Where(uc => (uc.UserId == senderId || uc.UserId == receiverId))
+                .Where(uc => uc.UserId == senderId || uc.UserId == receiverId) // Check for either user
                 .GroupBy(uc => uc.ChannelId)
-                .Where(g => g.Count() == 2)  // Only return channels with both users
+                .Where(g => g.Count() == 2 && g.Any(uc => uc.UserId == senderId) && g.Any(uc => uc.UserId == receiverId)) // Ensure both sender and receiver are present
                 .Select(g => g.Key)
                 .ToListAsync();
 
