@@ -9,6 +9,8 @@ using Teams.Domain.Interfaces.Services;
 using Teams.Persistence.Context;
 using Teams.Persistence.Repositories;
 using Teams.Services.Services;
+using Teams.Hubs;
+using Teams.RealTimeServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +70,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<MessageNotifier>();
 
 
 
