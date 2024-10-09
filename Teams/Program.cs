@@ -35,6 +35,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+//Add SignalR services
+builder.Services.AddSignalR();
 
 // Add CORS services
 builder.Services.AddCors(options =>
@@ -46,6 +48,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });//Adding and using Cors is needed becaue, otherwise it will cause CORS(Cross-Origin Resource Sharing) error. This occures because the Angular frontend is running
 //on http://localhost:4200, while your backend API is running on https://localhost:7155, and the browser is blocking the request due to the same-origin policy.
+
 
 
 //Register DbContext
@@ -143,5 +146,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

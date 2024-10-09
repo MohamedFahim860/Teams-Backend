@@ -12,6 +12,7 @@ using Teams.Domain.DTOs;
 using Teams.Domain.Interfaces.Services;
 using Teams.Domain.Models;
 using Teams.Persistence.Context;
+using Teams.RealTimeServices;
 using Teams.Services.Services;
 
 namespace Teams.Controllers
@@ -23,12 +24,14 @@ namespace Teams.Controllers
         private readonly TeamsDbContext _context;
         private readonly ILogger<UsersController> _logger;
         private readonly IMessageService _messageService;
+        private readonly MessageNotifier _messageNotifier;
 
-        public MessagesController(TeamsDbContext context, ILogger<UsersController> logger, IMessageService messageService)
+        public MessagesController(TeamsDbContext context, ILogger<UsersController> logger, IMessageService messageService, MessageNotifier messageNotifier)
         {
             _context = context;
             _logger = logger;
             _messageService = messageService;
+            _messageNotifier = messageNotifier;
         }
 
         // Add User Message
@@ -53,9 +56,10 @@ namespace Teams.Controllers
                     ReceiverId = ReceiverId
                 };
 
-                int savedObjectCount = await _messageService.AddMessage(sendMessage);
+               // int savedObjectCount = await _messageService.AddMessage(sendMessage);
+               var savedMessageId = await _messageNotifier.AddMessageAndNotify(sendMessage);
                 _logger.LogInformation($"Message Added Successfully");
-                return Ok(savedObjectCount);
+                return Ok(savedMessageId);
             }
             catch (Exception ex)
             {
