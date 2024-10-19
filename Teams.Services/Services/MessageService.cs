@@ -16,23 +16,27 @@ namespace Teams.Services.Services
     public class MessageService:IMessageService
     {
         private readonly IMessageRepository _messageRepository;
+        private readonly IChannelRepository _channelRepository;
         private readonly TeamsDbContext _context;
 
-        public MessageService(IMessageRepository messageRepository, TeamsDbContext context) 
+        public MessageService(IMessageRepository messageRepository,IChannelRepository channelRepository, TeamsDbContext context) 
         {
             _messageRepository = messageRepository;
+            _channelRepository = channelRepository;
             _context = context;
         }
         public async Task<int> AddMessage(SendMessageDto message)
         {
             int senderId = message.message.UserId;
             // Step 1: Check if there is already a direct chat channel between sender and receiver
-            var channel = await GetDirectChatChannel(senderId, message.ReceiverId);
+            //var channel = await GetDirectChatChannel(senderId, message.ReceiverId);
+            var channel = await _channelRepository.GetDirectChatChannel(senderId, message.ReceiverId);
 
             if (channel == null)
             {
                 // Step 2: If no direct channel exists, create a new direct chat channel
-                channel = await CreateDirectChatChannel(senderId, message.ReceiverId);
+                //channel = await CreateDirectChatChannel(senderId, message.ReceiverId);
+                channel = await _channelRepository.CreateDirectChatChannel(senderId, message.ReceiverId); 
             }
 
             // Step 3: Create and save the message
@@ -44,8 +48,11 @@ namespace Teams.Services.Services
                 UserId = senderId
             };
 
-            _context.Message.Add(messageObj);
-            await _context.SaveChangesAsync();
+            
+            
+            //_context.Message.Add(messageObj);
+            //await _context.SaveChangesAsync();
+            var savedObjectCount = await _messageRepository.AddMessage(messageObj);
 
             //return the ID of the newly created message
             return messageObj.MessageId;
